@@ -1,15 +1,16 @@
+# Retinal eGFR Prediction using RETFound
 
-# Retinal Arterial Stiffness Prediction using RETFound
+This repository fine-tunes a Vision Transformer (ViT)-based RETFound model to predict estimated Glomerular Filtration Rate (eGFR), a marker of kidney function, directly from retinal fundus images using deep learning regression.
 
-This project fine-tunes a Vision Transformer (RETFound) model to predict arterial stiffness (e.g., Pulse Wave Velocity) from retinal fundus images using regression.
+---
 
 ## 📁 Project Structure
 
 ```
-retinal_stiffness_regression/
+retinal_egfr_regression/
 ├── data/
 │   ├── images/                  # Folder containing all images
-│   ├── fold1_train.csv          # CSV file: filename,pwv
+│   ├── fold1_train.csv          # CSV file: filename,egfr
 │   ├── fold1_val.csv
 │   └── fold1_test.csv
 ├── models/
@@ -18,42 +19,66 @@ retinal_stiffness_regression/
 │   └── retinal_dataset.py       # PyTorch Dataset class
 ├── engine/
 │   └── train_eval.py            # Training & evaluation functions
-├── main.py                      # Training entry point
+├── main_egfr.py                 # Training entry point for eGFR
+├── predict_example.py           # Predict single image or folder
+├── visualize_gradcam.py        # Grad-CAM visualization
 └── checkpoints/                 # Saved models
 ```
 
+---
+
 ## 🚀 How to Run
 
-1. Install dependencies:
+1. ✅ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Organize your data:
-   - Place all images in `data/images/`
-   - Create CSVs with columns: `filename,pwv` (and optionally `egfr` for future use)
+2. ✅ Organize your data:
+   - Place images in `data/images/`
+   - Prepare CSVs (`fold1_train.csv`, etc.) with format:
+     ```csv
+     filename,egfr
+     12345_21015_0.0.png,85.3
+     ```
 
-3. Run training:
+3. ✅ Train model for eGFR:
 ```bash
-python main.py
+python main_egfr.py
 ```
+
+---
 
 ## 📊 Outputs
 
-- Model metrics: MAE, RMSE, R² score
-- Model saved to `checkpoints/retfound_regression_fold1.pth`
+- Trained model saved in `checkpoints/`
+- Metrics: MAE, RMSE, R² score
+- Optionally: Grad-CAM overlay heatmaps for interpretation
 
-## 🔮 Roadmap
+---
 
-- ✅ Predict arterial stiffness (PWV) from fundus images
-- 🔜 Add support for predicting eGFR
-- 🔜 Extend to 5-fold cross-validation
-- 🔜 Grad-CAM visualization for model interpretability
+## 🔬 Model Interpretation
+
+Run Grad-CAM to visualize image regions influencing predictions:
+
+```bash
+python visualize_gradcam.py --image data/images/sample.png --checkpoint checkpoints/model_fold1.pth
+```
+
+---
+
+## 🧪 Predict on New Images
+
+```bash
+python predict_example.py --image data/images/sample.png --checkpoint checkpoints/model_fold1.pth
+```
+
+---
 
 ## ✍️ Citation
 
 To cite this work, please refer to:
-> Hashim, E.B., et al. *Predicting Arterial Stiffness from Retinal Images using Deep Learning*. University of Liverpool, 2025.
+> Hashim, E.B., et al. *Deep Learning Prediction of Kidney Function from Retinal Images Using RETFound*, University of Liverpool, 2025.
 
 ---
 
